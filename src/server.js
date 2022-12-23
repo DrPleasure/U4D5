@@ -1,6 +1,7 @@
 import express from "express" // NEW IMPORT SYNTAX (do not forget to add type: "module" to package.json to use this!!)
 import listEndpoints from "express-list-endpoints"
 import productRouter from './api/products/index.js'
+import multer from "multer"
 // import {
 //   genericErrorHandler,
 //   notFoundHandler,
@@ -13,6 +14,17 @@ const server = express()
 
 const port = 3001
 
+var upload = multer({ storage: storage }).single("demo_image");
+
+
+var storage = multer.diskStorage({   
+  destination: function(req, file, cb) { 
+     cb(null, './uploads');    
+  }, 
+  filename: function (req, file, cb) { 
+     cb(null , file.originalname);   
+  }
+});
 // ***************** MIDDLEWARES ********************
 
 const loggerMiddleware = (req, res, next) => {
