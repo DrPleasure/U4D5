@@ -1,11 +1,13 @@
-import express from "express" 
+import express from "express" // NEW IMPORT SYNTAX (do not forget to add type: "module" to package.json to use this!!)
 import listEndpoints from "express-list-endpoints"
+import productRouter from './api/products/index.js'
 // import {
 //   genericErrorHandler,
 //   notFoundHandler,
 //   badRequestHandler,
 //   unauthorizedHandler,
 // } from "./errorHandlers.js"
+
 
 const server = express()
 
@@ -29,11 +31,13 @@ const loggerMiddleware = (req, res, next) => {
   }
 } */
 
-// server.use(loggerMiddleware)
+// server.use(cors()) // Just to let FE communicate with BE successfully
+server.use(loggerMiddleware)
 /* server.use(policeOfficerMiddleware) */
 server.use(express.json()) // If you do not add this line here BEFORE the endpoints, all req.body will be UNDEFINED
 
 // ****************** ENDPOINTS *********************
+server.use('/products', productRouter)
 // server.use("/users", loggerMiddleware, usersRouter) // All users related endpoints will share the same /users prefix in their urls
 // server.use("/books", loggerMiddleware, booksRouter)
 
@@ -42,7 +46,7 @@ server.use(express.json()) // If you do not add this line here BEFORE the endpoi
 // server.use(unauthorizedHandler) // 401
 // server.use(notFoundHandler) // 404
 // server.use(genericErrorHandler) // 500
-// (the order of these error handlers does not really matters, except for genericErrorHandler which needs to be the last in chain)
+// (the order of these error handlers does not really matters, expect for genericErrorHandler which needs to be the last in chain)
 
 server.listen(port, () => {
   console.table(listEndpoints(server))
